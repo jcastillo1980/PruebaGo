@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"./nocache"
+
 	"github.com/gorilla/mux"
 )
 
@@ -42,7 +44,8 @@ func main() {
 	MiMux := mux.NewRouter().StrictSlash(false)
 	MiMux.HandleFunc("/api/repite/{valor}", funcGet).Methods("GET")
 	MiMux.HandleFunc("/api/os", funcGetOS).Methods("GET")
-	MiMux.PathPrefix("/").Handler(http.FileServer(http.Dir(fmt.Sprintf("%s", *rutaStatic))))
+
+	MiMux.PathPrefix("/").Handler(nocache.NoCache(http.FileServer(http.Dir(fmt.Sprintf("%s", *rutaStatic)))))
 	MiServer := &http.Server{
 		Addr:           fmt.Sprintf(":%d", *puerto),
 		Handler:        MiMux,
