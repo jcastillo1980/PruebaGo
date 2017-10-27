@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"./nocache"
+	"./tools"
 
 	"github.com/gorilla/mux"
 )
@@ -37,6 +38,11 @@ func main() {
 	rutaStatic := flag.String("v", "./public", "Ruta de la carpeta fichero estaticos")
 	puerto := flag.Int("p", 5050, "Puerto TCP servidor")
 	flag.Parse()
+
+	if tools.IsDirectory(*rutaStatic) == false {
+		temp := "./public"
+		rutaStatic = &temp
+	}
 
 	fmt.Println("Inicio del Servidor:")
 	fmt.Printf("http://127.0.0.1:%d\r\n", *puerto)
